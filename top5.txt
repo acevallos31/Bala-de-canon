@@ -1,0 +1,5 @@
+Jugador1,100
+Jugador2,80
+Jugador3,60
+Jugador4,40
+Jugador5,20

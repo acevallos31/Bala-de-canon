@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1713124347 source:c:\users\axeell.cevallos\downloads\bala_de_canon\graphito.cpp
+	<fstream>
+	<sstream>
+	<queue>
+	<vector>
+	<math.h>
+	<process.h>
+	<windows.h>
+	<windowsx.h>
+	"graphito.h"
+
+1713123738 c:\users\axeell.cevallos\downloads\bala_de_canon\graphito.h
+	<iostream>
+	<vector>
+	<array>
+
+1774043469 source:c:\users\axeell.cevallos\downloads\bala_de_canon\main.cpp
+	"graphito.h"
+
