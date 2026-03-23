@@ -18,3 +18,64 @@
 1774043469 source:c:\users\axeell.cevallos\downloads\bala_de_canon\main.cpp
 	"graphito.h"
 
+1774066760 source:c:\users\usuario\documents\bala-de-canon\bala.cpp
+	"Bala.h"
+
+1774066760 c:\users\usuario\documents\bala-de-canon\bala.h
+
+1774066760 source:c:\users\usuario\documents\bala-de-canon\blanco.cpp
+	"Blanco.h"
+
+1774066760 c:\users\usuario\documents\bala-de-canon\blanco.h
+
+1774066760 source:c:\users\usuario\documents\bala-de-canon\botones.cpp
+	"graphito.h"
+	<iostream>
+	"botones.h"
+
+1774066760 c:\users\usuario\documents\bala-de-canon\graphito.h
+	<iostream>
+	<vector>
+	<array>
+
+1774066760 c:\users\usuario\documents\bala-de-canon\botones.h
+	"graphito.h"
+	<iostream>
+
+1774066760 source:c:\users\usuario\documents\bala-de-canon\graphito.cpp
+	<fstream>
+	<sstream>
+	<queue>
+	<vector>
+	<math.h>
+	<process.h>
+	<windows.h>
+	<windowsx.h>
+	"graphito.h"
+
+1774066760 source:c:\users\usuario\documents\bala-de-canon\juego.cpp
+	"Juego.h"
+
+1774066760 c:\users\usuario\documents\bala-de-canon\juego.h
+
+1774066760 source:c:\users\usuario\documents\bala-de-canon\marcador.cpp
+	"Marcador.h"
+
+1774066760 c:\users\usuario\documents\bala-de-canon\marcador.h
+
+1774066760 source:c:\users\usuario\documents\bala-de-canon\top5.cpp
+	"Top5.h"
+
+1774066760 c:\users\usuario\documents\bala-de-canon\top5.h
+
+1774205417 source:c:\users\usuario\documents\bala-de-canon\canon.cpp
+	"Canon.h"
+	<math.h>
+
+1774205115 c:\users\usuario\documents\bala-de-canon\canon.h
+	"graphito.h"
+
+1774205737 source:c:\users\usuario\documents\bala-de-canon\main.cpp
+	"graphito.h"
+	"Canon.h"
+
