@@ -6,15 +6,16 @@ using namespace std;
 using namespace graphito;
 
 
-Boton::Boton(int _x, int _y, int _ancho, int _alto, string _etiqueta){
+Boton::Boton(int _x, int _y, int _ancho, int _alto,int _estilo, string _etiqueta){
     x = _x;
     y = _y;
     ancho = _ancho;
     alto = _alto;
+    estilo = _estilo;
     etiqueta = _etiqueta;
     color = CL_PLATA;
-    estilo = EBT_REDONDEADO;
     visible = false;
+    presionado = false;
 }
 
 void Boton::mostrar(){
@@ -29,7 +30,15 @@ void Boton::mostrar(){
                 FormatoBorde(EB_CONTINUO,2,CL_NEGRO);
                 RectanguloRedondeado(x,y,x+ancho,y+alto,30);
                 break;
-            //case EBT_3D:
+                case EBT_3D:
+                    FormatoBorde(EB_CONTINUO,0);
+                    Rectangulo(x,y,x+ancho,y+alto);
+                    FormatoBorde(EB_CONTINUO,2,(presionado)?CL_NEGRO:CL_BLANCO);
+                    Linea(x,y,x,y+alto);
+                    Linea(x,y,x+ancho,y);
+                    FormatoBorde(EB_CONTINUO,2,(presionado)?CL_BLANCO:CL_NEGRO);
+                    Linea(x,y+alto,x+ancho,y+alto);
+                    Linea(x+ancho,y,x+ancho,y+alto);
         }
 
 
@@ -98,4 +107,31 @@ void Boton::reetiquetar(string _etiqueta){
 
     if(esvisible)
         mostrar();
+}
+bool Boton::ratonSobre(){
+    if(visible){
+        int rx, ry;
+        Raton(rx,ry);
+        return((rx>=x)&&(rx<=x+ancho)&&(ry>=y)&&(ry<=y+alto));
+    }else
+        return false;
+
+}
+
+bool Boton::click(){
+    if(visible){
+        if(ratonSobre()){
+            if(RatonBotonIzq()&&!presionado){
+                presionado = true;
+                actualizar();
+                return true;
+            }
+            if(!RatonBotonIzq()&&presionado){
+                presionado = false;
+                actualizar();
+            }
+            return false;
+        }
+    }else
+        return false;
 }
