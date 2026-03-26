@@ -18,17 +18,22 @@
 1774043469 source:c:\users\axeell.cevallos\downloads\bala_de_canon\main.cpp
 	"graphito.h"
 
-1774066760 source:c:\users\usuario\documents\bala-de-canon\bala.cpp
+1774487658 source:c:\users\usuario\documents\bala-de-canon\bala.cpp
 	"Bala.h"
+	<math.h>
 
-1774066760 c:\users\usuario\documents\bala-de-canon\bala.h
+1774487658 c:\users\usuario\documents\bala-de-canon\bala.h
+	"graphito.h"
 
-1774066760 source:c:\users\usuario\documents\bala-de-canon\blanco.cpp
+1774487614 source:c:\users\usuario\documents\bala-de-canon\blanco.cpp
 	"Blanco.h"
+	<stdlib.h>
+	<time.h>
 
-1774066760 c:\users\usuario\documents\bala-de-canon\blanco.h
+1774487614 c:\users\usuario\documents\bala-de-canon\blanco.h
+	"graphito.h"
 
-1774066760 source:c:\users\usuario\documents\bala-de-canon\botones.cpp
+1774484402 source:c:\users\usuario\documents\bala-de-canon\botones.cpp
 	"graphito.h"
 	<iostream>
 	"botones.h"
@@ -38,7 +43,7 @@
 	<vector>
 	<array>
 
-1774066760 c:\users\usuario\documents\bala-de-canon\botones.h
+1774484402 c:\users\usuario\documents\bala-de-canon\botones.h
 	"graphito.h"
 	<iostream>
 
@@ -68,14 +73,17 @@
 
 1774066760 c:\users\usuario\documents\bala-de-canon\top5.h
 
-1774205417 source:c:\users\usuario\documents\bala-de-canon\canon.cpp
+1774485376 source:c:\users\usuario\documents\bala-de-canon\canon.cpp
 	"Canon.h"
 	<math.h>
 
-1774205115 c:\users\usuario\documents\bala-de-canon\canon.h
+1774485376 c:\users\usuario\documents\bala-de-canon\canon.h
 	"graphito.h"
 
-1774205737 source:c:\users\usuario\documents\bala-de-canon\main.cpp
+1774489963 source:c:\users\usuario\documents\bala-de-canon\main.cpp
 	"graphito.h"
 	"Canon.h"
+	"Bala.h"
+	"Blanco.h"
+	"Botones.h"
 

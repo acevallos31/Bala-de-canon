@@ -20,4 +20,6 @@ public:
     int getX();
     int getY();
     int getAngulo();
+    int getPuntaX();   // extremo del tubo (punto de salida de la bala)
+    int getPuntaY();
 };

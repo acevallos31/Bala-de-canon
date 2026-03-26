@@ -137,3 +137,16 @@ int Canon::getY(){
 int Canon::getAngulo(){
     return angulo;
 }
+
+int Canon::getPuntaX(){
+    double rad = angulo * M_PI / 180.0;
+    int bx = x;
+    int by = y - 18;
+    return bx + (int)(largo * cos(rad));
+}
+
+int Canon::getPuntaY(){
+    double rad = angulo * M_PI / 180.0;
+    int by = y - 18;
+    return by - (int)(largo * sin(rad));
+}
