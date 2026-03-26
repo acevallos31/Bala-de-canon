@@ -37,10 +37,10 @@ void Bala::mover() {
     vy -= GRAVEDAD;
 
     // Detener si sale de la pantalla
-    if (x < 0 || x > VAncho() || y > VAlto() || y < 0) {
-        activa = false;
-        return;
-    }
+    if (x < 15 || x > 885 || y > 455 || y < 15) {
+    activa = false;
+    return;
+}
 
     mostrar();   // dibuja en nueva posicion
 }

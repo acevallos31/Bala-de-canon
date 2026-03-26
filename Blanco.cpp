@@ -62,19 +62,18 @@ void Blanco::mover(int _x, int _y) {
 }
 
 void Blanco::reubicarAleatorio() {
-    int ancho = VAncho();
-    int alto  = VAlto();
 
-    int minX = (ancho > 0) ? ancho / 2 : 450;
-    int maxX = (ancho > 0) ? ancho - radio - 20 : 860;
-    int minY = radio + 20;
-    int maxY = (alto > 0) ? alto - radio - 140 : 420;
+    int minX = 200;
+    int maxX = 885 - radio - 10;
+
+    int minY = 15 + radio;
+    int maxY = 455 - radio - 10;
 
     if(maxX <= minX) maxX = minX + 1;
     if(maxY <= minY) maxY = minY + 1;
 
-    int nx = minX + rand() % (maxX - minX + 1);
-    int ny = minY + rand() % (maxY - minY + 1);
+    int nx = minX + rand() % (maxX - minX);
+    int ny = minY + rand() % (maxY - minY);
 
     mover(nx, ny);
 }
