@@ -110,7 +110,7 @@ int main(){
     int alturasCanon[3] = {450, 410, 370};
     int indiceAlturaCanon = 0;
 
-    while(tecla != TC_ESCAPE){
+    //while(tecla != TC_ESCAPE){
         bool actualizarPanel = false;
         bool actualizarInfo = false;
 
@@ -226,9 +226,9 @@ int main(){
             blanco.mostrar();
         }
 
-        Espera(20);
+        Espera(5000);
     }
 
-    VCierra();
-    return 0;
-}
+  //  VCierra();
+   // return 0;
+//}
