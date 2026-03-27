@@ -5,10 +5,10 @@ using namespace graphito;
 
 const float GRAVEDAD = 0.4f;
 const int   RADIO    = 8;
-const int LIM_IZQ = 20;
-const int LIM_ARR = 20;
-const int LIM_DER = 1180;
-const int LIM_ABA = 605;
+const int LIM_IZQ = 20 + RADIO + 1;
+const int LIM_ARR = 20 + RADIO + 1;
+const int LIM_DER = 1180 - RADIO - 1;
+const int LIM_ABA = 605 - RADIO - 1;
 
 Bala::Bala() {
     x      = 0;
@@ -22,9 +22,11 @@ void Bala::disparar(float origenX, float origenY, int angulo, float velocidad) {
     if (activa) return;   // no disparar si ya hay una bala en vuelo
 
     double rad = angulo * M_PI / 180.0;
+    float avanceInicial = (float)RADIO + 6.0f;
 
-    x  = origenX;
-    y  = origenY;
+    // Nace un poco delante de la punta para no "perforar" visualmente el canion
+    x  = origenX + (float)(cos(rad) * avanceInicial);
+    y  = origenY - (float)(sin(rad) * avanceInicial);
     vx = (float)(cos(rad) * velocidad);
     vy = (float)(sin(rad) * velocidad);
 

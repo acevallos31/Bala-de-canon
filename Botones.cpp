@@ -41,11 +41,12 @@ void Boton::mostrar(){
                     Linea(x+ancho,y,x+ancho,y+alto);
         }
 
-
-
-        TFormato("Arial",30,0,FT_NEGRITA,CL_NEGRO);
+        int tamFuente = alto - 8;
+        if(tamFuente < 12) tamFuente = 12;
+        if(tamFuente > 30) tamFuente = 30;
+        TFormato("Arial",tamFuente,0,FT_NEGRITA,CL_NEGRO);
         TJustificar(JT_CENTRO);
-        TMostrar(x+ancho/2,y+alto/2,ancho,alto,etiqueta);
+        TMostrar(x + ancho/2, y + alto/2, ancho, alto, etiqueta);
 
         visible = true;
     }
@@ -119,19 +120,22 @@ bool Boton::ratonSobre(){
 }
 
 bool Boton::click(){
-    if(visible){
-        if(ratonSobre()){
-            if(RatonBotonIzq()&&!presionado){
-                presionado = true;
-                actualizar();
-                return true;
-            }
-            if(!RatonBotonIzq()&&presionado){
-                presionado = false;
-                actualizar();
-            }
-            return false;
-        }
-    }else
+    if(!visible)
         return false;
+
+    // Al soltar el mouse, el boton siempre vuelve a estado normal
+    if(!RatonBotonIzq() && presionado){
+        presionado = false;
+        actualizar();
+    }
+
+    if(ratonSobre()){
+        if(RatonBotonIzq() && !presionado){
+            presionado = true;
+            actualizar();
+            return true;
+        }
+    }
+
+    return false;
 }

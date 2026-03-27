@@ -65,10 +65,11 @@ void dibujarPanelControles(){
 }
 
 void actualizarPanelControles(int angulo, int velocidad){
-    // Limpiar SOLO el area de etiquetas y casillas (no toca la fila de botones preset)
+    // Limpiar SOLO las zonas de texto/casillas, evitando columnas de botones
     FormatoBorde(EB_CONTINUO, 0, CL_PLATA);
     FormatoRelleno(ER_SOLIDO, CL_PLATA);
-    Rectangulo(CONTROL_X - 10, CONTROL_Y - 12, CONTROL_X + 355, CONTROL_Y + 73);
+    Rectangulo(CONTROL_X, CONTROL_Y - 12, CONTROL_X + 145, CONTROL_Y + 73);
+    Rectangulo(CONTROL_X + 182, CONTROL_Y - 12, CONTROL_X + 345, CONTROL_Y + 73);
 
     // Dibujar cada campo como unidad etiqueta+casilla+valor
     dibujarCampoControl("ANGULO:", std::to_string(angulo),
@@ -101,10 +102,13 @@ int main(){
     Blanco blanco;
     float velocidad = 15.0f;
 
-    Boton bv(CONTROL_X + 370, CONTROL_Y + 20, 50, 50, EBT_3D, "+");
-    Boton bs(CONTROL_X + 430, CONTROL_Y + 20, 50, 50, EBT_3D, "-");
+    Boton bv(CONTROL_X + 348, CONTROL_Y + 20, 32, 24, EBT_3D, "+");
+    Boton bs(CONTROL_X + 348, CONTROL_Y + 46, 32, 24, EBT_3D, "-");
     Boton br(CONTROL_X + 500, CONTROL_Y + 20, 120, 50, EBT_3D, "Fuego");
     Boton ba(CONTROL_X + 640, CONTROL_Y + 20, 110, 50, EBT_3D, "Fin");
+    // Botones + y - para el angulo (a la derecha de la caja de angulo)
+    Boton bAngUp (CONTROL_X + 148, CONTROL_Y + 20, 32, 24, EBT_3D, "+");
+    Boton bAngDn (CONTROL_X + 148, CONTROL_Y + 46, 32, 24, EBT_3D, "-");
     // Botones de velocidad rapida debajo de la caja de velocidad
     Boton bVel5 (CONTROL_X + 180, CONTROL_Y + 78, 48, 30, EBT_3D, "5");
     Boton bVel15(CONTROL_X + 233, CONTROL_Y + 78, 48, 30, EBT_3D, "15");
@@ -121,6 +125,8 @@ int main(){
     ba.mostrar();
     bv.mostrar();
     bs.mostrar();
+    bAngUp.mostrar();
+    bAngDn.mostrar();
     bVel5.mostrar();
     bVel15.mostrar();
     bVel30.mostrar();
@@ -161,19 +167,31 @@ int main(){
             actualizarPanel = true;
         }
 
+        // Botones + y - del angulo
+        if(bAngUp.click()){
+            angulo += 5;
+            c1.rotar(angulo);
+            angulo = c1.getAngulo();
+            actualizarPanel = true;
+        }
+        if(bAngDn.click()){
+            angulo -= 5;
+            c1.rotar(angulo);
+            angulo = c1.getAngulo();
+            actualizarPanel = true;
+        }
+
         // Ajustar velocidad con botones + y - (click inicial)
         if(bv.click()){
             velocidad += 1.0f;
             if(velocidad > 30.0f) velocidad = 30.0f;
             actualizarPanel = true;
-            actualizarInfo = true;
         }
 
         if(bs.click()){
             velocidad -= 1.0f;
             if(velocidad < 1.0f) velocidad = 1.0f;
             actualizarPanel = true;
-            actualizarInfo = true;
         }
 
         // Auto-repeat: si se mantiene presionado + o -
@@ -183,7 +201,6 @@ int main(){
                 velocidad += 1.0f;
                 if(velocidad > 30.0f) velocidad = 30.0f;
                 actualizarPanel = true;
-                actualizarInfo = true;
             }
         } else {
             holdV = 0;
@@ -195,7 +212,6 @@ int main(){
                 velocidad -= 1.0f;
                 if(velocidad < 1.0f) velocidad = 1.0f;
                 actualizarPanel = true;
-                actualizarInfo = true;
             }
         } else {
             holdS = 0;
@@ -205,17 +221,14 @@ int main(){
         if(bVel5.click()){
             velocidad = 5.0f;
             actualizarPanel = true;
-            actualizarInfo = true;
         }
         if(bVel15.click()){
             velocidad = 15.0f;
             actualizarPanel = true;
-            actualizarInfo = true;
         }
         if(bVel30.click()){
             velocidad = 30.0f;
             actualizarPanel = true;
-            actualizarInfo = true;
         }
 
         // Disparo con ESPACIO o boton Fuego
@@ -286,19 +299,10 @@ int main(){
 
         if(actualizarPanel){
             actualizarPanelControles(angulo, (int)velocidad);
-            bv.mostrar();
-            bs.mostrar();
-            br.mostrar();
-            ba.mostrar();
-            bVel5.mostrar();
-            bVel15.mostrar();
-            bVel30.mostrar();
         }
 
         if(actualizarInfo){
             actualizarMarcador(disparos, aciertos, puntos);
-            blanco.ocultar();
-            blanco.mostrar();
         }
 
         Espera(10);
