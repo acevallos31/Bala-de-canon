@@ -63,11 +63,12 @@ void Blanco::mover(int _x, int _y) {
 
 void Blanco::reubicarAleatorio() {
 
-    int minX = 200;
-    int maxX = 885 - radio - 10;
+    // Mantener el blanco lejos del cañon y fuera de la zona baja dificil
+    int minX = 420;
+    int maxX = 1180 - radio - 20;
 
-    int minY = 15 + radio;
-    int maxY = 455 - radio - 10;
+    int minY = 20 + radio;
+    int maxY = 470 - radio;
 
     if(maxX <= minX) maxX = minX + 1;
     if(maxY <= minY) maxY = minY + 1;

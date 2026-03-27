@@ -57,13 +57,18 @@ void dibujarPanelControles(){
     FormatoBorde(EB_CONTINUO, 2, CL_GRIS);
     FormatoRelleno(ER_SOLIDO, CL_PLATA);
     Rectangulo(PANEL_IZQ, PANEL_ARR, PANEL_DER, PANEL_ABA);
+
+    // Texto estatico: solo se dibuja una vez
+    TFormato("Arial", 12, 0, FT_NEGRITA, CL_NEGRO);
+    TJustificar(JT_IZQUIERDA);
+    TMostrar(CONTROL_X + 12, CONTROL_Y + 87, 160, 16, "Flechas arriba/abajo");
 }
 
 void actualizarPanelControles(int angulo, int velocidad){
-    // Limpiar solo el área de campos para no borrar los botones
+    // Limpiar SOLO el area de etiquetas y casillas (no toca la fila de botones preset)
     FormatoBorde(EB_CONTINUO, 0, CL_PLATA);
     FormatoRelleno(ER_SOLIDO, CL_PLATA);
-    Rectangulo(CONTROL_X - 10, CONTROL_Y - 12, CONTROL_X + 355, CONTROL_Y + 115);
+    Rectangulo(CONTROL_X - 10, CONTROL_Y - 12, CONTROL_X + 355, CONTROL_Y + 73);
 
     // Dibujar cada campo como unidad etiqueta+casilla+valor
     dibujarCampoControl("ANGULO:", std::to_string(angulo),
@@ -72,33 +77,26 @@ void actualizarPanelControles(int angulo, int velocidad){
     dibujarCampoControl("VELOCIDAD:", std::to_string(velocidad) + " px/s",
                         CONTROL_X + 180, CONTROL_Y - 8,
                         CONTROL_X + 180, CONTROL_Y + 20, 160, 50);
-
-    // Ayuda en el panel
-    FormatoBorde(EB_CONTINUO, 1, CL_PLATA);
-    FormatoRelleno(ER_SOLIDO, CL_PLATA);
-    Rectangulo(CONTROL_X + 10, CONTROL_Y + 85, CONTROL_X + 180, CONTROL_Y + 110);
-    TFormato("Arial", 12, 0, FT_NEGRITA, CL_NEGRO);
-    TJustificar(JT_IZQUIERDA);
-    TMostrar(CONTROL_X + 12, CONTROL_Y + 87, 160, 16, "Flechas arriba/abajo");
 }
 
 void actualizarMarcador(int disparos, int aciertos, int puntos){
-    FormatoBorde(EB_CONTINUO, 2, CL_BLANCO);
-    FormatoRelleno(ER_SOLIDO, CL_NEGRO);
-    Rectangulo(25, 100, 280, 220);
+    // Dibujar marcador en el panel de controles, a la izquierda del angulo
+    FormatoBorde(EB_CONTINUO, 0, CL_PLATA);
+    FormatoRelleno(ER_SOLIDO, CL_PLATA);
+    Rectangulo(15, PANEL_ARR + 8, 260, PANEL_ABA - 8);
 
-    TFormato("Consolas", 24, 0, FT_NEGRITA, CL_BLANCO);
+    TFormato("Consolas", 22, 0, FT_NEGRITA, CL_NEGRO);
     TJustificar(JT_IZQUIERDA);
-    TMostrar(40, 108, 230, 28, "Disparos: " + std::to_string(disparos));
-    TMostrar(40, 145, 230, 28, "Blancos:  " + std::to_string(aciertos));
-    TMostrar(40, 182, 230, 28, "Puntos:   " + std::to_string(puntos));
+    TMostrar(20, PANEL_ARR + 16, 235, 26, "Disparos: " + std::to_string(disparos));
+    TMostrar(20, PANEL_ARR + 55, 235, 26, "Blancos:  " + std::to_string(aciertos));
+    TMostrar(20, PANEL_ARR + 94, 235, 26, "Puntos:   " + std::to_string(puntos));
 }
 
 int main(){
 
     VDefine(1200,800,"Bala de Canon");
 
-    Canon c1(90, 595, 140);
+    Canon c1(90, 580, 140);
     Bala  bala;
     Blanco blanco;
     float velocidad = 15.0f;
@@ -107,6 +105,10 @@ int main(){
     Boton bs(CONTROL_X + 430, CONTROL_Y + 20, 50, 50, EBT_3D, "-");
     Boton br(CONTROL_X + 500, CONTROL_Y + 20, 120, 50, EBT_3D, "Fuego");
     Boton ba(CONTROL_X + 640, CONTROL_Y + 20, 110, 50, EBT_3D, "Fin");
+    // Botones de velocidad rapida debajo de la caja de velocidad
+    Boton bVel5 (CONTROL_X + 180, CONTROL_Y + 78, 48, 30, EBT_3D, "5");
+    Boton bVel15(CONTROL_X + 233, CONTROL_Y + 78, 48, 30, EBT_3D, "15");
+    Boton bVel30(CONTROL_X + 286, CONTROL_Y + 78, 48, 30, EBT_3D, "30");
     Espera(100);
     dibujarEscenarioBase();
     dibujarPanelControles();
@@ -119,6 +121,9 @@ int main(){
     ba.mostrar();
     bv.mostrar();
     bs.mostrar();
+    bVel5.mostrar();
+    bVel15.mostrar();
+    bVel30.mostrar();
 
     int tecla  = TC_NINGUNA;
     int angulo = 35;
@@ -127,8 +132,14 @@ int main(){
     int aciertos = 0;
     int fallosConsecutivos = 0;
     bool impactoEnDisparoActual = false;
-    int alturasCanon[3] = {595, 555, 515};
+    int alturasCanon[3] = {580, 380, 180};
     int indiceAlturaCanon = 0;
+    // Contadores para auto-repeat de botones + y -
+    // 300ms de retardo inicial (30 frames), luego repite cada 80ms (8 frames)
+    const int HOLD_RETARDO  = 30;
+    const int HOLD_INTERVALO = 8;
+    int holdV = 0;
+    int holdS = 0;
 
     while(tecla != TC_ESCAPE){
         bool actualizarPanel = false;
@@ -150,23 +161,59 @@ int main(){
             actualizarPanel = true;
         }
 
-        // Ajustar velocidad con botones + y -
+        // Ajustar velocidad con botones + y - (click inicial)
         if(bv.click()){
             velocidad += 1.0f;
-
-            if(velocidad > 30.0f)
-                velocidad = 30.0f;
-
+            if(velocidad > 30.0f) velocidad = 30.0f;
             actualizarPanel = true;
             actualizarInfo = true;
         }
 
         if(bs.click()){
             velocidad -= 1.0f;
+            if(velocidad < 1.0f) velocidad = 1.0f;
+            actualizarPanel = true;
+            actualizarInfo = true;
+        }
 
-            if(velocidad < 1.0f)
-                velocidad = 1.0f;
+        // Auto-repeat: si se mantiene presionado + o -
+        if(bv.ratonSobre() && RatonBotonIzq()){
+            holdV++;
+            if(holdV > HOLD_RETARDO && (holdV - HOLD_RETARDO) % HOLD_INTERVALO == 0){
+                velocidad += 1.0f;
+                if(velocidad > 30.0f) velocidad = 30.0f;
+                actualizarPanel = true;
+                actualizarInfo = true;
+            }
+        } else {
+            holdV = 0;
+        }
 
+        if(bs.ratonSobre() && RatonBotonIzq()){
+            holdS++;
+            if(holdS > HOLD_RETARDO && (holdS - HOLD_RETARDO) % HOLD_INTERVALO == 0){
+                velocidad -= 1.0f;
+                if(velocidad < 1.0f) velocidad = 1.0f;
+                actualizarPanel = true;
+                actualizarInfo = true;
+            }
+        } else {
+            holdS = 0;
+        }
+
+        // Botones de velocidad preestablecida
+        if(bVel5.click()){
+            velocidad = 5.0f;
+            actualizarPanel = true;
+            actualizarInfo = true;
+        }
+        if(bVel15.click()){
+            velocidad = 15.0f;
+            actualizarPanel = true;
+            actualizarInfo = true;
+        }
+        if(bVel30.click()){
+            velocidad = 30.0f;
             actualizarPanel = true;
             actualizarInfo = true;
         }
@@ -243,6 +290,9 @@ int main(){
             bs.mostrar();
             br.mostrar();
             ba.mostrar();
+            bVel5.mostrar();
+            bVel15.mostrar();
+            bVel30.mostrar();
         }
 
         if(actualizarInfo){

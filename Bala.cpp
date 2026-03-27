@@ -5,6 +5,10 @@ using namespace graphito;
 
 const float GRAVEDAD = 0.4f;
 const int   RADIO    = 8;
+const int LIM_IZQ = 20;
+const int LIM_ARR = 20;
+const int LIM_DER = 1180;
+const int LIM_ABA = 605;
 
 Bala::Bala() {
     x      = 0;
@@ -25,6 +29,7 @@ void Bala::disparar(float origenX, float origenY, int angulo, float velocidad) {
     vy = (float)(sin(rad) * velocidad);
 
     activa = true;
+    mostrar(); // dibujar de inmediato para evitar un frame "invisible"
 }
 
 void Bala::mover() {
@@ -36,11 +41,11 @@ void Bala::mover() {
     y  -= vy;    // y crece hacia abajo en pantalla
     vy -= GRAVEDAD;
 
-    // Detener si sale de la pantalla
-    if (x < 15 || x > 885 || y > 455 || y < 15) {
-    activa = false;
-    return;
-}
+    // Detener si sale del area de juego
+    if (x < LIM_IZQ || x > LIM_DER || y > LIM_ABA || y < LIM_ARR) {
+        activa = false;
+        return;
+    }
 
     mostrar();   // dibuja en nueva posicion
 }
