@@ -3,6 +3,11 @@
 #include "Bala.h"
 #include "Blanco.h"
 #include "Botones.h"
+#include "Top5.h"
+#include <fstream>
+#include <vector>
+#include <algorithm>
+
 
 using namespace graphito;
 
@@ -293,9 +298,11 @@ int main(){
 
         // Fin automatico al completar 20 disparos
         if(disparos >= 20 && !bala.estaActiva()){
-            Mensaje("Fin de partida. Puntos: " + std::to_string(puntos) + " | Aciertos: " + std::to_string(aciertos));
-            tecla = TC_ESCAPE;
-        }
+        Mensaje("Fin de partida. Puntos: " + std::to_string(puntos) + " | Aciertos: " + std::to_string(aciertos));
+        guardarTop5(puntos);
+        mostrarTop5();
+        tecla = TC_ESCAPE;
+}
 
         if(actualizarPanel){
             actualizarPanelControles(angulo, (int)velocidad);

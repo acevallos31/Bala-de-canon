@@ -1,6 +1,7 @@
-#pragma once
+#ifndef TOP5_H
+#define TOP5_H
 
-class Top5 {
-public:
-    Top5();
-};
+void guardarTop5(int puntos);
+void mostrarTop5();
+
+#endif
