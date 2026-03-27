@@ -1,0 +1,17 @@
+# Code::Blocks user/dependency files
+*.depend
+*.layout
+
+# Build outputs
+bin/
+obj/
+*.o
+*.exe
+
+# Office temporary files
+~$*.docx
+~$*.doc
+
+# OS noise
+Thumbs.db
+.DS_Store
