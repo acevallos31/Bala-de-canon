@@ -69,9 +69,9 @@ void actualizarMarcador(int disparos, int aciertos, int puntos){
 
     TFormato("Consolas", 18, 0, FT_NEGRITA, CL_BLANCO);
     TJustificar(JT_IZQUIERDA);
-    TMostrar(650, 92, 190, 22, "Disparos: " + std::to_string(disparos));
-    TMostrar(650, 118, 190, 22, "Blancos:  " + std::to_string(aciertos));
-    TMostrar(650, 144, 190, 22, "Puntos:   " + std::to_string(puntos));
+    TMostrar(100, 92, 190, 22, "Disparos: " + std::to_string(disparos));
+    TMostrar(100, 118, 190, 22, "Blancos:  " + std::to_string(aciertos));
+    TMostrar(100, 144, 190, 22, "Puntos:   " + std::to_string(puntos));
 }
 
 int main(){
@@ -110,7 +110,7 @@ int main(){
     int alturasCanon[3] = {450, 410, 370};
     int indiceAlturaCanon = 0;
 
-    //while(tecla != TC_ESCAPE){
+    while(tecla != TC_ESCAPE){
         bool actualizarPanel = false;
         bool actualizarInfo = false;
 
@@ -226,9 +226,9 @@ int main(){
             blanco.mostrar();
         }
 
-        Espera(5000);
+        Espera(10);
     }
 
-  //  VCierra();
-   // return 0;
-//}
+    VCierra();
+    return 0;
+}
