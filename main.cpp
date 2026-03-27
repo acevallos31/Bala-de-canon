@@ -6,23 +6,23 @@
 
 using namespace graphito;
 
-const int JUEGO_IZQ = 15;
-const int JUEGO_ARR = 15;
-const int JUEGO_DER = 885;
-const int JUEGO_ABA = 455;
+const int JUEGO_IZQ = 20;
+const int JUEGO_ARR = 20;
+const int JUEGO_DER = 1180;
+const int JUEGO_ABA = 605;
 
 const int PANEL_IZQ = 0;
-const int PANEL_ARR = 460;
-const int PANEL_DER = 899;
-const int PANEL_ABA = 599;
+const int PANEL_ARR = 615;
+const int PANEL_DER = 1199;
+const int PANEL_ABA = 799;
 
-const int CONTROL_X = 210;
-const int CONTROL_Y = 485;
+const int CONTROL_X = 280;
+const int CONTROL_Y = 640;
 
 void dibujarEscenarioBase(){
     FormatoBorde(EB_CONTINUO, 1, CL_PLATA);
     FormatoRelleno(ER_SOLIDO, CL_GRIS);
-    Rectangulo(0, 0, 899, 599);
+    Rectangulo(0, 0, 1199, 799);
 
     FormatoBorde(EB_CONTINUO, 2, CL_GRIS);
     FormatoRelleno(ER_SOLIDO, CL_NEGRO);
@@ -34,59 +34,79 @@ void dibujarCajaValor(int x, int y, int ancho, int alto, const std::string& text
     FormatoRelleno(ER_SOLIDO, CL_BLANCO);
     Rectangulo(x, y, x + ancho, y + alto);
 
+    // Limpiar interior para evitar residuos visuales al actualizar el valor
+    FormatoBorde(EB_CONTINUO, 0, CL_BLANCO);
+    FormatoRelleno(ER_SOLIDO, CL_BLANCO);
+    Rectangulo(x + 2, y + 2, x + ancho - 2, y + alto - 2);
+
+    TFormato("Consolas", 24, 0, FT_NEGRITA, CL_NEGRO);
+    TJustificar(JT_IZQUIERDA);
+    TMostrar(x + 10, y + 9, ancho - 16, alto - 12, texto);
+}
+
+void dibujarCampoControl(const std::string& etiqueta, const std::string& valor,
+                        int xEtiqueta, int yEtiqueta,
+                        int xCaja, int yCaja, int anchoCaja, int altoCaja){
     TFormato("Arial", 18, 0, FT_NEGRITA, CL_NEGRO);
-    TJustificar(JT_CENTRO);
-    TMostrar(x, y + 7, ancho, alto - 6, texto);
+    TJustificar(JT_IZQUIERDA);
+    TMostrar(xEtiqueta, yEtiqueta, 180, 22, etiqueta);
+    dibujarCajaValor(xCaja, yCaja, anchoCaja, altoCaja, valor);
 }
 
 void dibujarPanelControles(){
     FormatoBorde(EB_CONTINUO, 2, CL_GRIS);
     FormatoRelleno(ER_SOLIDO, CL_PLATA);
     Rectangulo(PANEL_IZQ, PANEL_ARR, PANEL_DER, PANEL_ABA);
-
-    TFormato("Arial", 16, 0, FT_NEGRITA, CL_NEGRO);
-    TJustificar(JT_IZQUIERDA);
-    TMostrar(CONTROL_X + 15, CONTROL_Y - 2, 120, 20, "ANGULO:");
-    TMostrar(CONTROL_X + 175, CONTROL_Y - 2, 150, 20, "VELOCIDAD:");
 }
 
 void actualizarPanelControles(int angulo, int velocidad){
-    dibujarCajaValor(CONTROL_X + 10, CONTROL_Y + 26, 105, 40, std::to_string(angulo));
-    dibujarCajaValor(CONTROL_X + 180, CONTROL_Y + 26, 125, 40, std::to_string(velocidad) + " px/s");
+    // Limpiar solo el área de campos para no borrar los botones
+    FormatoBorde(EB_CONTINUO, 0, CL_PLATA);
+    FormatoRelleno(ER_SOLIDO, CL_PLATA);
+    Rectangulo(CONTROL_X - 10, CONTROL_Y - 12, CONTROL_X + 355, CONTROL_Y + 115);
 
+    // Dibujar cada campo como unidad etiqueta+casilla+valor
+    dibujarCampoControl("ANGULO:", std::to_string(angulo),
+                        CONTROL_X + 10, CONTROL_Y - 8,
+                        CONTROL_X + 10, CONTROL_Y + 20, 130, 50);
+    dibujarCampoControl("VELOCIDAD:", std::to_string(velocidad) + " px/s",
+                        CONTROL_X + 180, CONTROL_Y - 8,
+                        CONTROL_X + 180, CONTROL_Y + 20, 160, 50);
+
+    // Ayuda en el panel
     FormatoBorde(EB_CONTINUO, 1, CL_PLATA);
     FormatoRelleno(ER_SOLIDO, CL_PLATA);
-    Rectangulo(CONTROL_X + 8, CONTROL_Y + 70, CONTROL_X + 140, CONTROL_Y + 90);
+    Rectangulo(CONTROL_X + 10, CONTROL_Y + 85, CONTROL_X + 180, CONTROL_Y + 110);
     TFormato("Arial", 12, 0, FT_NEGRITA, CL_NEGRO);
     TJustificar(JT_IZQUIERDA);
-    TMostrar(CONTROL_X + 10, CONTROL_Y + 72, 120, 14, "Flechas arriba/abajo");
+    TMostrar(CONTROL_X + 12, CONTROL_Y + 87, 160, 16, "Flechas arriba/abajo");
 }
 
 void actualizarMarcador(int disparos, int aciertos, int puntos){
-    FormatoBorde(EB_CONTINUO, 1, CL_NEGRO);
+    FormatoBorde(EB_CONTINUO, 2, CL_BLANCO);
     FormatoRelleno(ER_SOLIDO, CL_NEGRO);
-    Rectangulo(640, 80, 860, 170);
+    Rectangulo(25, 100, 280, 220);
 
-    TFormato("Consolas", 18, 0, FT_NEGRITA, CL_BLANCO);
+    TFormato("Consolas", 24, 0, FT_NEGRITA, CL_BLANCO);
     TJustificar(JT_IZQUIERDA);
-    TMostrar(100, 92, 190, 22, "Disparos: " + std::to_string(disparos));
-    TMostrar(100, 118, 190, 22, "Blancos:  " + std::to_string(aciertos));
-    TMostrar(100, 144, 190, 22, "Puntos:   " + std::to_string(puntos));
+    TMostrar(40, 108, 230, 28, "Disparos: " + std::to_string(disparos));
+    TMostrar(40, 145, 230, 28, "Blancos:  " + std::to_string(aciertos));
+    TMostrar(40, 182, 230, 28, "Puntos:   " + std::to_string(puntos));
 }
 
 int main(){
 
-    VDefine(900,600,"Bala de Canon");
+    VDefine(1200,800,"Bala de Canon");
 
-    Canon c1(70, 450, 110);
+    Canon c1(90, 595, 140);
     Bala  bala;
     Blanco blanco;
     float velocidad = 15.0f;
 
-    Boton bv(CONTROL_X + 320, CONTROL_Y + 18, 38, 30, EBT_3D, "+");
-    Boton bs(CONTROL_X + 320, CONTROL_Y + 56, 38, 30, EBT_3D, "-");
-    Boton br(CONTROL_X + 385, CONTROL_Y + 14, 95, 72, EBT_3D, "Fuego");
-    Boton ba(CONTROL_X + 490, CONTROL_Y + 14, 85, 72, EBT_3D, "Fin");
+    Boton bv(CONTROL_X + 370, CONTROL_Y + 20, 50, 50, EBT_3D, "+");
+    Boton bs(CONTROL_X + 430, CONTROL_Y + 20, 50, 50, EBT_3D, "-");
+    Boton br(CONTROL_X + 500, CONTROL_Y + 20, 120, 50, EBT_3D, "Fuego");
+    Boton ba(CONTROL_X + 640, CONTROL_Y + 20, 110, 50, EBT_3D, "Fin");
     Espera(100);
     dibujarEscenarioBase();
     dibujarPanelControles();
@@ -107,7 +127,7 @@ int main(){
     int aciertos = 0;
     int fallosConsecutivos = 0;
     bool impactoEnDisparoActual = false;
-    int alturasCanon[3] = {450, 410, 370};
+    int alturasCanon[3] = {595, 555, 515};
     int indiceAlturaCanon = 0;
 
     while(tecla != TC_ESCAPE){
@@ -217,8 +237,13 @@ int main(){
             tecla = TC_ESCAPE;
         }
 
-        if(actualizarPanel)
+        if(actualizarPanel){
             actualizarPanelControles(angulo, (int)velocidad);
+            bv.mostrar();
+            bs.mostrar();
+            br.mostrar();
+            ba.mostrar();
+        }
 
         if(actualizarInfo){
             actualizarMarcador(disparos, aciertos, puntos);
